@@ -51,6 +51,7 @@ void printGame(Game game){
 }
 
 int validateCoordinates(char board[3][3], int x, int y){
+	//validar jogada
 	if(x >= 0 && x < 3 && y >= 0 && y < 3){
 		if(board[x][y] == EMPTY_SPACE){
 			return 1;
