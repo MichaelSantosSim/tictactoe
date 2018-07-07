@@ -62,7 +62,7 @@ int validateCoordinates(char board[3][3], int x, int y){
 }
 
 void calculateWinner(Game* game){
-
+	// calcularvencedor
 	int winner[8][3][2] =  {
 								// HORIZONTAL
 							 	{{0,0},{0,1},{0,2}},
