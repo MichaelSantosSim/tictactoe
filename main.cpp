@@ -1,10 +1,20 @@
 #include <stdio.h>
 #include <string.h>
 #include <iostream>
+#include <windows.h>
 
 #define PLAYER_1 'X'
 #define PLAYER_2 'O'
 #define EMPTY_SPACE ' '
+
+
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
 
 using namespace std;
 
@@ -30,22 +40,41 @@ void prepareGame(Game* game){
 
 }
 
+std::string getColoredString(std::string text){
+	return "\033[1;31m" + text + "\033[0m";
+}
+
+std::string printPlayer(char player){
+	if(player == PLAYER_1){
+		return "\033[1;32mX\033[0m";
+	}else if(player == PLAYER_2){
+		return "\033[1;34mO\033[0m";
+	}else{
+		return " ";
+	}
+}
+
 void printGame(Game game){
 	system("clear");
 	if(game.gameOver){
-		std::cout << "Winner: " << game.currentPlayer << std::endl;
+		std::cout << endl << "\tWinner: " << game.currentPlayer << std::endl;
 	}else{
-		std::cout << "Current Player: " << game.currentPlayer << std::endl;
+		std::cout << endl << getColoredString("\tCurrent Player: ") << game.currentPlayer<< std::endl;
 	}
 	std::cout << std::endl;
-	std::cout << "-------------" << std::endl;
+	
+	std::cout << getColoredString("\t+---+---+---+---+") << std::endl;
+	std::cout << getColoredString("\t|   | 1 | 2 | 3 |") << std::endl;
+	std::cout << getColoredString("\t+---+---+---+---+") << std::endl;
+
+
 	for(int i = 0; i < 3;i++){
-		std::cout << "|";
+		std::cout << getColoredString("\t| " + std::to_string(i+1) + " |");
 		for(int j=0; j<3; j++){
-			std::cout << " " << game.board[i][j] << " |";
+			std::cout << " " << printPlayer(game.board[i][j]) << " |";
 		}
 		std::cout << std::endl;
-		std::cout << "-------------" << std::endl;
+		std::cout << getColoredString("\t+---+") << "---+---+---+" << std::endl;
 	}
 	std::cout << std::endl;
 }
@@ -86,6 +115,7 @@ void calculateWinner(Game* game){
 
 			if(ok && j == 2){
 				game->gameOver = 1;
+				return;
 			}else if(!ok){
 				break;
 			}
@@ -99,9 +129,9 @@ void runGame(Game* game){
 	printGame(*game);
 	while(!game->gameOver){
 		int x, y;
-		std::cout << "Input X coordinate: ";
+		std::cout << "\tInput X coordinate: ";
 		std::cin >> x;
-		std::cout << "Input Y coordinate: ";
+		std::cout << "\tInput Y coordinate: ";
 		std::cin >> y;
 		x--; y--;
 
@@ -115,14 +145,14 @@ void runGame(Game* game){
 			}
 			printGame(*game);
 		}else{
-			std::cout << x << " and " << y << " are invalid coordinates" << std::endl << std::endl;
+			std::cout << "\t" << x << " and " << y << " are invalid coordinates" << std::endl << std::endl;
 		}
 	}
 
 }
 
 int main (){
-	Game game;
+   Game game;
    prepareGame(&game);
    runGame(&game);
    
